@@ -1,86 +1,283 @@
-:root{
-  --text:#111;
-  --muted:#555;
-  --link:#0b57d0;
-  --max: 980px;
+/* Amos Kaminski — homepage
+   Type: Linux Libertine (text) and Linux Biolinum (dates, navigation, links),
+   the same family as the CV. Fonts are self-hosted in /fonts. */
+
+@font-face { font-family: "Libertine"; src: url("fonts/libertine-regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Libertine"; src: url("fonts/libertine-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Libertine"; src: url("fonts/libertine-semibold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Libertine"; src: url("fonts/libertine-semibold-italic.woff2") format("woff2"); font-weight: 600; font-style: italic; font-display: swap; }
+@font-face { font-family: "Biolinum"; src: url("fonts/biolinum-regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+
+:root {
+  --paper: #fbfbf9;
+  --ink: #18202b;
+  --slate: #5a6573;
+  --hair: #dce0e5;
+  --link: #1f4fa3;
+  --sage: #3f6b3a;
+  --sage-bg: #e6efe2;
+  --code-bg: #f1f3f5;
+
+  --serif: "Libertine", "Linux Libertine O", "Libertinus Serif", Georgia, serif;
+  --sans: "Biolinum", "Linux Biolinum O", "Libertinus Sans", "Helvetica Neue", Arial, sans-serif;
+  --math: "STIX Two Math", "Cambria Math", "Latin Modern Math", "DejaVu Serif", serif;
+
+  --measure: 40rem;
+  --page: 54rem;
+  --gutter: 7.25rem;
 }
 
-*{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: var(--text);
-  background:#fff;
-  line-height:1.65;
+/* Dark theme: follows the system unless the visitor picks one with the switch */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12161d;
+    --ink: #e6e8ec;
+    --slate: #9aa3af;
+    --hair: #2a313c;
+    --link: #9db9f2;
+    --sage: #a9cda0;
+    --sage-bg: #1f2a1e;
+    --code-bg: #1a2029;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12161d;
+  --ink: #e6e8ec;
+  --slate: #9aa3af;
+  --hair: #2a313c;
+  --link: #9db9f2;
+  --sage: #a9cda0;
+  --sage-bg: #1f2a1e;
+  --code-bg: #1a2029;
 }
 
-.wrap{ max-width: var(--max); margin: 0 auto; padding: 44px 18px 70px; }
+*, *::before, *::after { box-sizing: border-box; }
 
-header{ margin-bottom: 26px; }
-h1{ font-size: 48px; letter-spacing:-0.02em; margin:0; }
-.subtitle{ margin: 6px 0 0; color: var(--muted); }
+html { -webkit-text-size-adjust: 100%; }
 
-nav{
-  margin-top: 18px;
-  display:flex;
-  gap: 22px;
-  flex-wrap:wrap;
-  font-size: 18px;
-}
-nav a{
-  color: var(--link);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-nav a.active{
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 650;
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.1875rem;          /* Libertine sets small; 19px reads like 17px elsewhere */
+  line-height: 1.6;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  text-rendering: optimizeLegibility;
 }
 
-main{ margin-top: 18px; }
-p{ margin: 0 0 14px; }
-a{ color: var(--link); }
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 2px; }
 
-hr{ border:none; border-top:1px solid #e6e6e6; margin: 26px 0; }
+.skip {
+  position: absolute; left: -999px; top: 0.5rem;
+  background: var(--ink); color: var(--paper); padding: 0.4rem 0.8rem;
+  font-family: var(--sans); font-size: 0.9rem;
+}
+.skip:focus { left: 0.5rem; }
 
-.two-col{
-  display:grid;
-  grid-template-columns: 1fr 320px;
-  gap: 28px;
-  align-items:start;
+.page { max-width: var(--page); margin: 0 auto; padding: 3.5rem 1.5rem 3rem; }
+
+/* ---------- Header ---------- */
+
+.site-header { margin-bottom: 3rem; position: relative; }
+
+.name {
+  margin: 0;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 1.6rem + 3vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.012em;
 }
-.profile{
-  width:100%;
-  height:auto;
-  border-radius: 10px;
-  display:block;
-  border: 1px solid #e6e6e6;
+.name a { color: inherit; text-decoration: none; }
+
+/* The rule under the name is a Cantor set, levels 0 to 5 */
+.cantor { display: block; width: 100%; height: 1.85rem; margin: 1.1rem 0 1.15rem; color: var(--ink); }
+.cantor rect { fill: currentColor; }
+.cantor .lv0 { opacity: 1; }
+.cantor .lv1 { opacity: 0.88; }
+.cantor .lv2 { opacity: 0.76; }
+.cantor .lv3 { opacity: 0.64; }
+.cantor .lv4 { opacity: 0.52; }
+
+/* One orchestrated moment: on the home page the levels appear in turn */
+@media (prefers-reduced-motion: no-preference) {
+  .home .cantor g { animation: cantor-in 420ms cubic-bezier(.2,.7,.2,1) both; transform-origin: center; transform-box: fill-box; }
+  .home .cantor .lv0 { animation-delay: 80ms; }
+  .home .cantor .lv1 { animation-delay: 230ms; }
+  .home .cantor .lv2 { animation-delay: 380ms; }
+  .home .cantor .lv3 { animation-delay: 530ms; }
+  .home .cantor .lv4 { animation-delay: 680ms; }
+  @keyframes cantor-in { from { opacity: 0; transform: scaleY(0); } }
 }
 
-.list{ padding-left: 18px; margin: 0; }
-.paper{
-  margin: 0 0 18px;
+.nav { display: flex; flex-wrap: wrap; gap: 0.35rem 1.6rem; font-family: var(--sans); font-size: 1.02rem; }
+.nav a { color: var(--ink); text-decoration: none; padding-bottom: 0.15rem; border-bottom: 2px solid transparent; }
+.nav a:hover { border-bottom-color: var(--hair); }
+.nav a[aria-current="page"] { border-bottom-color: var(--link); }
+
+/* ---------- Text ---------- */
+
+main p { margin: 0 0 1rem; max-width: var(--measure); }
+
+h2 {
+  font-weight: 600;
+  font-variant: small-caps;
+  letter-spacing: 0.035em;
+  font-size: 1.32rem;
+  margin: 3.2rem 0 1.25rem;
+  line-height: 1.2;
 }
-.paper-title{
-  font-weight: 700;
-}
-.meta{
-  color: var(--muted);
-  font-size: 15px;
+h2:first-child { margin-top: 0; }
+
+h3 {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--slate);
+  margin: 2rem 0 0.9rem;
 }
 
-footer{
-  margin-top: 50px;
-  color: #777;
-  font-size: 14px;
+.lede { font-size: 1.08em; }
+
+.bb { font-family: var(--math); font-style: normal; }
+sub { font-size: 0.7em; line-height: 0; }
+
+/* ---------- Home ---------- */
+
+.intro { display: grid; grid-template-columns: 14.5rem minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+.intro p:last-child { margin-bottom: 0; }
+.portrait {
+  width: 100%; height: auto; display: block;
+  aspect-ratio: 1 / 1; object-fit: cover;
+  border-radius: 3px;
+  filter: saturate(0.92);
+}
+.portrait-wrap { margin: 0.35rem 0 0; }
+
+.contact-grid { display: grid; grid-template-columns: var(--gutter) minmax(0, 1fr); gap: 0.45rem 1.5rem; max-width: var(--measure); }
+.contact-grid dt { font-family: var(--sans); color: var(--slate); font-size: 0.98rem; padding-top: 0.12rem; }
+.contact-grid dd { margin: 0; }
+
+/* ---------- Dated entries (news, papers, talks, teaching) ---------- */
+
+.entries { list-style: none; margin: 0; padding: 0; }
+.entry { display: grid; grid-template-columns: var(--gutter) minmax(0, 1fr); gap: 1.5rem; padding: 0 0 1.35rem; }
+.entry:last-child { padding-bottom: 0; }
+.when {
+  font-family: var(--sans);
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--slate);
+  font-size: 0.98rem;
+  padding-top: 0.14rem;
+  white-space: nowrap;
+}
+.entry .body { max-width: var(--measure); }
+.entry .body p { margin: 0.35rem 0 0; }
+
+.title { font-weight: 600; }
+.title a { color: var(--ink); text-decoration: none; }
+.title a:hover { color: var(--link); text-decoration: underline; }
+.talk-title { font-style: italic; }
+.venue { color: var(--slate); }
+.with { color: var(--slate); }
+.summary { color: var(--ink); font-size: 0.97em; }
+
+.links { font-family: var(--sans); font-size: 0.95rem; margin-top: 0.35rem; display: flex; flex-wrap: wrap; gap: 0.2rem 1.1rem; }
+.links .status { color: var(--slate); }
+
+.tag {
+  display: inline-block;
+  font-family: var(--sans); font-size: 0.8rem; line-height: 1;
+  color: var(--sage); background: var(--sage-bg);
+  padding: 0.28rem 0.5rem 0.24rem; border-radius: 3px;
+}
+.tag-plain { color: var(--slate); background: transparent; box-shadow: inset 0 0 0 1px var(--hair); }
+.when .tag { display: block; width: max-content; margin-top: 0.4rem; }
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  margin-top: 4.5rem; padding-top: 1.1rem; border-top: 1px solid var(--hair);
+  font-family: var(--sans); font-size: 0.92rem; color: var(--slate);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem;
+}
+.site-footer a { color: var(--slate); }
+
+/* ---------- Light / dark switch ---------- */
+
+.theme-toggle {
+  position: absolute; top: 0.85rem; right: 0;
+  width: 2.1rem; height: 2.1rem; padding: 0.45rem;
+  background: none; border: 1px solid var(--hair); border-radius: 50%;
+  color: var(--slate); cursor: pointer;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--slate); }
+.theme-toggle svg { display: block; width: 100%; height: 100%; }
+.theme-toggle rect { fill: currentColor; }
+
+/* ---------- Interactive Cantor rule ---------- */
+
+.cantor.interactive { cursor: pointer; touch-action: manipulation; }
+.cantor rect { transition: opacity 120ms ease, fill 120ms ease; }
+.cantor.dim rect { opacity: 0.18; }
+.cantor.dim rect.lit { opacity: 1; fill: var(--link); }
+.cantor-hint { font-family: var(--sans); font-size: 0.86rem; color: var(--slate); margin: -0.55rem 0 0.95rem; max-width: none; }
+
+/* ---------- Cite ---------- */
+
+.linkish {
+  font: inherit; color: var(--link); background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em;
+}
+.linkish:hover { text-decoration-thickness: 2px; }
+.cite { margin-top: 0.7rem; }
+.cite pre {
+  margin: 0 0 0.45rem; padding: 0.75rem 0.9rem; overflow-x: auto;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.8rem; line-height: 1.5;
+  background: var(--code-bg); border: 1px solid var(--hair); border-radius: 3px; color: var(--ink);
+}
+.cite .copy-btn { font-family: var(--sans); font-size: 0.92rem; }
+
+/* ---------- Talk thumbnails ---------- */
+
+.entry .body:has(> .with-thumb) { max-width: none; }
+.with-thumb { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.75rem; align-items: start; }
+.thumb { display: block; margin-top: 0.2rem; }
+.thumb img { display: block; height: 6.75rem; width: auto; border: 1px solid var(--hair); border-radius: 2px; background: #fff; }
+.thumb:hover img { border-color: var(--link); }
+
+/* ---------- 404 ---------- */
+
+.cantor-404 { display: block; width: 100%; max-width: 34rem; height: auto; margin: 0.4rem 0 1.6rem; color: var(--ink); }
+.cantor-404 rect { fill: currentColor; }
+.cantor-404 .hole { fill: none; stroke: var(--link); stroke-width: 2; stroke-dasharray: 7 6; }
+.cantor-404 .here { font-family: var(--sans); font-size: 22px; fill: var(--link); }
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 760px) {
+  .intro { grid-template-columns: 1fr; gap: 1.75rem; }
+  .portrait-wrap { max-width: 13rem; }
 }
 
-@media (max-width: 860px){
-  h1{ font-size: 40px; }
-  nav{ font-size: 17px; gap: 16px; }
-  .two-col{ grid-template-columns: 1fr; }
-  .profile{ max-width: 420px; }
+@media (max-width: 600px) {
+  body { font-size: 1.125rem; }
+  .page { padding: 2.25rem 1.15rem 2.5rem; }
+  .site-header { margin-bottom: 2.25rem; }
+  .entry, .contact-grid { grid-template-columns: 1fr; gap: 0.1rem; }
+  .when .tag { display: inline-block; margin: 0 0 0 0.55rem; vertical-align: 0.1em; }
+  .with-thumb { grid-template-columns: 1fr; gap: 0.6rem; }
+  .thumb img { height: 5.5rem; }
+  .theme-toggle { top: 0.45rem; width: 1.9rem; height: 1.9rem; }
+  .entry { padding-bottom: 1.25rem; }
+  .contact-grid dd { margin-bottom: 0.6rem; }
+  h2 { margin-top: 2.6rem; }
+}
+
+@media print {
+  .nav, .skip, .cantor, .theme-toggle, .cite-btn, .thumb { display: none; }
+  body { background: #fff; color: #000; }
 }
